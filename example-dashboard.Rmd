@@ -1,0 +1,51 @@
+---
+title: "Simple Dashobard"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Scatterplot
+
+```{r}
+library(reactable)
+library(tidyverse)
+theme_set(theme_minimal(25))
+
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point(color = "gray40") +
+  geom_smooth(color = "#57DBC1")
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Bar chart
+
+```{r}
+mpg %>% 
+  group_by(cyl) %>% 
+  summarize(mean = mean(hwy)) %>%
+ggplot(aes(mean, factor(cyl))) +
+  geom_col(fill = "#57DBC1", alpha = 0.8) +
+  labs(y = "Cylinders",
+       x = "Highway MPG") +
+  scale_x_continuous(expand = c(0, 0)) +
+  theme(panel.grid.minor = element_blank(),
+        panel.grid.major.y = element_blank())
+```
+
+### Table
+
+```{r}
+reactable(mpg)
+```
+
